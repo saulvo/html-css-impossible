@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  width: 100%;
+
+  color: #fff;
+  background-color: #000;
+}
+
+$width: 10px;
+$index_hidden: 3, 4, 15, 16, 17;
+
+.panels {
+  display: flex;
+
+  font-family: 'Poppins', sans-serif;
+  font-size: 100px;
+  font-weight: 500;
+  line-height: 1;
+
+  span {
+    position: relative;
+    overflow: hidden;
+
+    width: $width;
+    height: 100px;
+
+    transition: all 0.35s;
+
+    &::before {
+      position: absolute;
+      left: var(--left);
+      content: "I'm possible";
+      width: max-content;
+      color: hsl(var(--hue), 75%, 75%);
+    }
+
+    @for $i from 0 to 60 {
+      &:nth-child(#{$i + 1}) {
+        --left: #{$width * $i * -1};
+        --hue: #{360 / 24 * $i};
+        --delay: #{$i * 0.03s};
+
+        @if index($index_hidden, $i + 1) {
+          opacity: 0;
+          width: 0;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    span {
+      animation: rotate 3s var(--delay) ease-in-out;
+
+      @for $i from 0 to 60 {
+        &:nth-child(#{$i + 1}) {
+          @if index($index_hidden, $i + 1) {
+            opacity: 1;
+            width: $width;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(720deg);
+  }
+}
